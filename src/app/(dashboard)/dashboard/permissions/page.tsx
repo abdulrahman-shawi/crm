@@ -36,7 +36,7 @@ export default function PermissionsPage() {
   useEffect(() => {
     fetch("http://localhost:5678/webhook/9b66b8cf-e918-4450-851d-781d6a1af73f")
       .then((res) => res.json())
-      .then((data) => setPermissionsData(data))
+       .then((data: PermissionItem[]) => setPermissionsData(data))
       .catch((err) => console.error(err));
   }, []);
 
