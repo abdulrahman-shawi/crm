@@ -25,7 +25,7 @@ export function DialogComponent({
   classButton
 }: {
   id?:string;
-  textButton?: string | IconNode;
+  textButton?: React.ReactNode;
   textTitle?: string;
   textDescription?: string;
   children?: React.ReactNode;
