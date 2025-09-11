@@ -10,11 +10,26 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import codes from "@/lib/codes.json";
+import codesJson from "@/lib/codes.json";
+
+// تعريف نوع بيانات الدولة
+interface CountryData {
+  country: string;
+  iso2: string;
+  iso3: string;
+  phone: string;
+}
+
+// تعريف نوع الـ codes مع index signature
+interface Codes {
+  [key: string]: CountryData;
+}
+
+const codes: Codes = codesJson;
 
 type Props = {
   defaultCountry?: string;
-  onSelect?: (data: any) => void; // callback لتمرير البيانات
+  onSelect?: (data: CountryData) => void; // callback لتمرير البيانات
 };
 
 export default function CountrySelect({ defaultCountry = "D", onSelect }: Props) {
@@ -22,7 +37,7 @@ export default function CountrySelect({ defaultCountry = "D", onSelect }: Props)
 
   const handleChange = (value: string) => {
     setCountry(value);
-    if (onSelect) {
+    if (onSelect && codes[value]) {
       onSelect(codes[value]); // إرسال بيانات الدولة للصفحة الأم
     }
   };
@@ -36,7 +51,7 @@ export default function CountrySelect({ defaultCountry = "D", onSelect }: Props)
         <SelectContent className="w-full max-h-60 overflow-auto">
           <SelectGroup className="w-full">
             <SelectLabel>الدول</SelectLabel>
-            {Object.entries(codes).map(([code, data]: any) => (
+            {Object.entries(codes).map(([code, data]) => (
               <SelectItem key={code} value={code} className="w-full my-3">
                 {data.country} - {data.phone}
               </SelectItem>
