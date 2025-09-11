@@ -1,6 +1,6 @@
 'use client';
 
-import { useUser } from '@/PROVIDER';
+import { useUser } from '@/utils/provider';
 import { useState, useEffect } from 'react';
 
 const getInitialPermissions = (modules, actions) => {

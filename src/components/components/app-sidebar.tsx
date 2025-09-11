@@ -14,7 +14,7 @@ import { Users, Package, ShoppingCart, CalendarDays, LayoutDashboard } from "luc
 import { ComboboxDemo } from "./combobox";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useUser } from "@/utils/PROVIDER";
+import { useUser } from "@/utils/provider";
 
 
 // Menu items can stay outside as they are static data

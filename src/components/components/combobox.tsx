@@ -19,7 +19,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { useRouter } from "next/navigation"
-import { useUser } from "@/PROVIDER"
+import { useUser } from "@/utils/provider"
 
 const frameworks = [
   {

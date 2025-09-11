@@ -13,7 +13,7 @@ import SelectDynamic from "@/components/components/select";
 import { CustomerTable } from "@/components/tABLES/customer";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useUser } from "@/PROVIDER";
+import { useUser } from "@/utils/provider";
 import { publicDecrypt } from "crypto";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";

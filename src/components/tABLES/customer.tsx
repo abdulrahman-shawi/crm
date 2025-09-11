@@ -15,7 +15,7 @@ import { DialogComponent } from "../components/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { Calendar22 } from "../components/datapicker";
 import SelectDynamic from "../components/select";
-import { useUser } from "@/PROVIDER";
+import { useUser } from "@/utils/provider";
 import { useRouter } from "next/navigation";
 import { fetchData } from "@/api/api";
 import { Button } from "../ui/button";

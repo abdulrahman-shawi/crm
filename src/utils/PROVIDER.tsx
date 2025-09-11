@@ -4,7 +4,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-// 1. Define the shape of the data you want to share
+// 1. Define the shape  of the data you want to share
 interface UserContextType {
   name: string;
   ID: string;
