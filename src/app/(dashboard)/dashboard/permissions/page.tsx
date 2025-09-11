@@ -16,7 +16,15 @@ import {
 } from "@/components/ui/table";
 
 export default function PermissionsPage() {
-  const [permissionsData, setPermissionsData] = useState([]);
+
+  interface PermissionItem {
+  id: string;
+  user_id: string;
+  permission: Record<string, Record<string, boolean>>; // أو أي شكل مطابق للـ API
+}
+
+
+  const [permissionsData, setPermissionsData] = useState<PermissionItem[]>([]);
   const [name, setName] = useState("");
   const [editPermissions, setEditPermissions] = useState(null);
 
