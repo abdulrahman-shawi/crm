@@ -22,11 +22,11 @@ export function Calendar22({ value, onChange, label = "تحديد موعد" }: C
   const [open, setOpen] = React.useState(false)
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 w-full">
       <Label htmlFor="date" className="mt-3">
         {label}
       </Label>
-      <Popover open={open} onOpenChange={setOpen} className="w-full">
+      <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
             variant="outline"
@@ -35,15 +35,16 @@ export function Calendar22({ value, onChange, label = "تحديد موعد" }: C
           >
             {value ? value.toLocaleDateString() : "Select date"}
             <ChevronDownIcon />
-          </Button >
+          </Button>
         </PopoverTrigger>
         <PopoverContent className="w-full overflow-hidden p-0" align="start">
-          <Calendar className="w-full"
+          <Calendar
+            className="w-full"
             mode="single"
             selected={value}
             captionLayout="dropdown"
             onSelect={(date) => {
-              onChange?.(date)  // استدعاء الدالة اللي جاية من الخارج
+              onChange?.(date)
               setOpen(false)
             }}
           />
