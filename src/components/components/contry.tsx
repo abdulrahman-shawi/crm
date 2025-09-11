@@ -44,7 +44,7 @@ export default function CountrySelect({ defaultCountry = "D", onSelect }: Props)
 
   return (
     <div className="w-full"> {/* الحاوية الأم تأخذ كامل العرض */}
-      <Select value={country} onValueChange={handleChange} className="w-full my-3">
+      <Select value={country} onValueChange={handleChange}>
         <SelectTrigger className="w-full">
           <SelectValue placeholder="اختر الدولة" />
         </SelectTrigger>
