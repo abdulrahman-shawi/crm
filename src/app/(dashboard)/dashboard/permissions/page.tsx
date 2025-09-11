@@ -165,7 +165,7 @@ export default function PermissionsPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {permissionsData.map((item, index) => {
+            {permissionsData.map((item: PermissionItem, index) => {
               const trueCount = Object.values(item.permission)
                 .flatMap((module) => Object.values(module))
                 .filter((val) => val === true).length;
