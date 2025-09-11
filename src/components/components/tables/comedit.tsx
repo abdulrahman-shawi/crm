@@ -1,10 +1,28 @@
 'use client';
 
-import { useUser } from '@/PROVIDER';
 import { useState, useEffect } from 'react';
 
-const getInitialPermissions = (modules, actions) => {
-  const initialState = {};
+// تعريف الأنواع
+interface Module {
+  key: string;
+  label: string;
+}
+
+interface Action {
+  key: string;
+  label: string;
+}
+
+type PermissionsType = Record<string, Record<string, boolean>>;
+
+interface PermissionsTutorialEditProps {
+  initialPermissions: PermissionsType | null;
+  setEditPermissions: (permissions: PermissionsType) => void;
+}
+
+// دالة إنشاء الحالة الابتدائية
+const getInitialPermissions = (modules: Module[], actions: Action[]): PermissionsType => {
+  const initialState: PermissionsType = {};
   modules.forEach(module => {
     initialState[module.key] = {};
     actions.forEach(action => {
@@ -14,8 +32,8 @@ const getInitialPermissions = (modules, actions) => {
   return initialState;
 };
 
-export default function PermissionsTutorialEdit({ initialPermissions, setEditPermissions }) {
-  const modules = [
+export default function PermissionsTutorialEdit({ initialPermissions, setEditPermissions }: PermissionsTutorialEditProps) {
+  const modules: Module[] = [
     { key: 'products', label: 'المنتجات' },
     { key: 'invoices', label: 'الفواتير' },
     { key: 'clients', label: 'العملاء' },
@@ -27,14 +45,16 @@ export default function PermissionsTutorialEdit({ initialPermissions, setEditPer
     { key: 'categories', label: 'تصنيف المنتجات' },
   ];
 
-  const actions = [
+  const actions: Action[] = [
     { key: 'view', label: 'مشاهدة' },
     { key: 'add', label: 'إضافة' },
     { key: 'edit', label: 'تعديل' },
     { key: 'delete', label: 'حذف' },
   ];
 
-  const [permissions, setPermissions] = useState(initialPermissions || getInitialPermissions(modules, actions));
+  const [permissions, setPermissions] = useState<PermissionsType>(
+    initialPermissions || getInitialPermissions(modules, actions)
+  );
 
   // ✅ تحديث الـ state عند وصول بيانات جديدة من الأب
   useEffect(() => {
@@ -44,8 +64,8 @@ export default function PermissionsTutorialEdit({ initialPermissions, setEditPer
   }, [initialPermissions]);
 
   // ✅ تغيير قيمة checkbox
-  const handleSingleCheckboxChange = (moduleKey, actionKey) => {
-    const updated = {
+  const handleSingleCheckboxChange = (moduleKey: string, actionKey: string) => {
+    const updated: PermissionsType = {
       ...permissions,
       [moduleKey]: {
         ...permissions[moduleKey],
@@ -92,4 +112,3 @@ export default function PermissionsTutorialEdit({ initialPermissions, setEditPer
     </div>
   );
 }
-

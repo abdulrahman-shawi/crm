@@ -3,8 +3,23 @@
 import { useUser } from '@/utils/sys';
 import { useState, useEffect } from 'react';
 
-const getInitialPermissions = (modules, actions) => {
-  const initialState = {};
+// 1️⃣ تعريف أنواع الـ Module وAction
+interface Module {
+  key: string;
+  label: string;
+}
+
+interface Action {
+  key: string;
+  label: string;
+}
+
+// 2️⃣ نوع Permissions
+type PermissionsType = Record<string, Record<string, boolean>>;
+
+// 3️⃣ دالة إنشاء الحالة الابتدائية
+const getInitialPermissions = (modules: Module[], actions: Action[]): PermissionsType => {
+  const initialState: PermissionsType = {};
   modules.forEach(module => {
     initialState[module.key] = {};
     actions.forEach(action => {
@@ -15,7 +30,7 @@ const getInitialPermissions = (modules, actions) => {
 };
 
 export default function PermissionsTutorial() {
-  const modules = [
+  const modules: Module[] = [
     { key: 'products', label: 'المنتجات' },
     { key: 'invoices', label: 'الفواتير' },
     { key: 'clients', label: 'العملاء' },
@@ -27,7 +42,7 @@ export default function PermissionsTutorial() {
     { key: 'categories', label: 'تصنيف المنتجات' },
   ];
 
-  const actions = [
+  const actions: Action[] = [
     { key: 'view', label: 'مشاهدة' },
     { key: 'add', label: 'إضافة' },
     { key: 'edit', label: 'تعديل' },
@@ -37,7 +52,7 @@ export default function PermissionsTutorial() {
   const { ID } = useUser();
 
   // ✅ state الأساسي
-  const [permissions, setPermissions] = useState(() => {
+  const [permissions, setPermissions] = useState<PermissionsType>(() => {
     if (typeof window !== 'undefined') {
       const saved = sessionStorage.getItem('permissions');
       return saved ? JSON.parse(saved) : getInitialPermissions(modules, actions);
@@ -51,22 +66,24 @@ export default function PermissionsTutorial() {
   }, [permissions]);
 
   // ✅ إرسال الصلاحيات
-  const handsub = () => {
+  const handsub = async () => {
     const formdata = { permissions, ID };
-    fetch('http://localhost:5678/webhook-test/5134016c-87e8-4b2d-becb-62e0f2ebafc1', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formdata),
-    })
-      .then(res => res.json())
-      .then(data => {
-        alert('✅ تم إرسال الصلاحيات بنجاح!');
-        console.log('الرد من n8n:', data);
-      })
-      .catch(err => {
-        alert('❌ فشل الاتصال بـ n8n');
-        console.error(err);
-      });
+    try {
+      const res = await fetch(
+        'http://localhost:5678/webhook-test/5134016c-87e8-4b2d-becb-62e0f2ebafc1',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formdata),
+        }
+      );
+      const data = await res.json();
+      alert('✅ تم إرسال الصلاحيات بنجاح!');
+      console.log('الرد من n8n:', data);
+    } catch (err) {
+      alert('❌ فشل الاتصال بـ n8n');
+      console.error(err);
+    }
   };
 
   // ✅ إعادة تعيين
@@ -77,7 +94,7 @@ export default function PermissionsTutorial() {
   };
 
   // ✅ تغيير قيمة checkbox
-  const handleSingleCheckboxChange = (moduleKey, actionKey) => {
+  const handleSingleCheckboxChange = (moduleKey: string, actionKey: string) => {
     setPermissions(prev => ({
       ...prev,
       [moduleKey]: {
