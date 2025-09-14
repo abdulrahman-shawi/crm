@@ -748,9 +748,6 @@ export function CustomerTable({
                     children={
                       <Interests
                         allInterests={allInterests}
-                        child1={chaild2}
-                        child2={chaild3}
-                        child3={chaild4}
                         activeInterests={activeInterests}
                         setActiveInterests={setActiveInterests}
                       />
