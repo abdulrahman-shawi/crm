@@ -48,8 +48,8 @@ export function CustomerTable({
   const [skanType, SetskanType] = useState("");
   const [countrycode, Setcountrycode] = useState("");
   const [countryiso, Setcountryiso] = useState("");
-  const [medicalConditions, SetmedicalConditions] = useState("");
-  const [customerinfoEdit, SetcustomerinfoEdit] = useState("");
+  const [medicalConditions, SetmedicalConditions] = useState<string[]>([]);
+  const [customerinfoEdit, SetcustomerinfoEdit] = useState<string[]>([]);
   const [id, SetId] = useState("");
   const { ID } = useUser();
   const [activeInterests, setActiveInterests] = useState<string[]>([]);
