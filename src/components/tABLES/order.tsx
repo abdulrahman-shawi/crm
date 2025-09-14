@@ -84,7 +84,7 @@ export default function OrderTable({ data , set }: { data: any[] , set:any }) {
       `http://localhost:5678/webhook/875824d8-5a2a-41e8-a6f5-a28a39703219?id=${id}`
     )
       .then((res) => {
-        if (!res.ok) throw new Error("gh");
+        if (!res.ok) throw new Error("gh" as any);
         return res.json();
       })
       .then((data) => {
@@ -190,7 +190,7 @@ export default function OrderTable({ data , set }: { data: any[] , set:any }) {
   const deleteorder= (id:string) => {
     fetch(`http://localhost:5678/webhook/bae46ce5-4a88-43bd-9373-4315f8fcc2e1?id=${id}`)
     .then(res => {
-      if(!res.json) throw new Error("error")
+      if(!res.json) throw new Error("error in " as any)
         return res.json()
     })
     .then(data => {
