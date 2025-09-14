@@ -28,11 +28,11 @@ export function InvoicePopup({ invoice, isOpen, onClose }: InvoicePopupProps) {
   const componentRef = useRef<HTMLDivElement>(null);
 
   // ✅ نسخة مستقرة (v2): استخدم content: () => ref.current
-  const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
-    documentTitle: `فاتورة-${invoice?.invoiceNumber}`,
-    onBeforeGetContent: () => console.log("Preparing to print..."),
-  });
+  // const handlePrint = useReactToPrint({
+  //   content: () => componentRef.current,
+  //   documentTitle: `فاتورة-${invoice?.invoiceNumber}`,
+  //   onBeforeGetContent: () => console.log("Preparing to print..."),
+  // });
 
   if (!invoice) return null;
 
@@ -146,7 +146,7 @@ export function InvoicePopup({ invoice, isOpen, onClose }: InvoicePopupProps) {
           <Button variant="outline" onClick={onClose}>
             إغلاق
           </Button>
-          <Button onClick={handlePrint}>طباعة الفاتورة</Button>
+          {/* <Button onClick={handlePrint}>طباعة الفاتورة</Button> */}
         </DialogFooter>
       </DialogContent>
     </Dialog>
