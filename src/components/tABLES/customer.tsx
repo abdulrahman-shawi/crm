@@ -465,7 +465,7 @@ export function CustomerTable({
   }
 
   const chaild3 = <div className="w-full">
-    {datamessage.map(e => (
+    {datamessage.map((e: { message: string; serial: string; meet_date:string }) => (
       <div className="w-[95%] mx-auto p-5 flex flex-col gap-3">
         <div className="flex items-center gap-3">
           <h1 className="text-md font-bold ">الرسالة : </h1>
