@@ -20,7 +20,46 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { fetchOrder } from "@/api/api";
 
-export default function OrderTable({ data , set }: { data: any[] , set:any }) {
+export default function OrderTable({ data, set }: { data: any[]; set: any }) {
+  type ProductItem = {
+    item: string;
+    amount: number;
+    price: number;
+    discount: number;
+    total: number;
+  };
+
+  type ProductData = {
+    id: number;
+    customer_name: string;
+    product: {
+      product: ProductItem[];
+    };
+    order_total: string;
+    items_discount: string;
+    total_iteme: string;
+    selectedpaytype: string;
+    recipientname: string;
+    recipientphone: string;
+    selectedCountry: string;
+    city: string;
+    municipality: string;
+    address: string;
+    recipientnote?: string;
+    map?: string;
+    companyname?: string;
+    code?: string;
+    selectedrecipienttype: string;
+    anthornote?: string;
+    under_order: string;
+    created_at: string;
+  };
+
+  type OrderDataType = {
+    product?: { json: ProductData; pairedItem?: any };
+    customer?: any;
+  };
+
   const listOrder = [
     "اختر الحالة",
     "طلب جديد",
@@ -33,7 +72,7 @@ export default function OrderTable({ data , set }: { data: any[] , set:any }) {
     "حجز بمبلغ مال",
   ];
   const [ordersStatus, setOrdersStatus] = useState<string[]>([]);
-  const [orderdatas, setOrderData] = useState([]);
+  const [orderdatas, setOrderData] = useState<OrderDataType>({});
   const [open, setisopen] = useState(false);
   const [open2, setisopen2] = useState(false);
   const [orderEdit, setOrderEdit] = useState([]);
@@ -56,14 +95,22 @@ export default function OrderTable({ data , set }: { data: any[] , set:any }) {
   const [anthorNote, setAnthorNote] = useState("");
   const [recipienttype, setrecipienttype] = useState("");
   const [selectedpaytype, setselectedpaytype] = useState("");
-  const [id , setid] = useState("")
-  const [country , setcountry] = useState("")
-  const [municipality , setcmunicipality] = useState("")
-
+  const [id, setid] = useState("");
+  const [country, setcountry] = useState("");
+  const [municipality, setcmunicipality] = useState("");
 
   const paytype = ["طريقة الدفع", "عند الإستلام", "تحويل بنكي", "أخرى"];
 
-  const countrylist = ["إختر المدينة", "تركيا", "سوريا", "العراق", "ليبيا", "أميركا", "أوروبا", "أخرى"];
+  const countrylist = [
+    "إختر المدينة",
+    "تركيا",
+    "سوريا",
+    "العراق",
+    "ليبيا",
+    "أميركا",
+    "أوروبا",
+    "أخرى",
+  ];
 
   const recipienttypelist = [
     "طريقة التسليم",
@@ -135,25 +182,24 @@ export default function OrderTable({ data , set }: { data: any[] , set:any }) {
         setCode(data[0].code || "");
         setSelectedRecipientType(data[0].selectedrecipienttype || "");
         setAnthorNote(data[0].anthornote || "");
-        setid(data[0].id)
-        setcountry(data[0].selectedCountry)
+        setid(data[0].id);
+        setcountry(data[0].selectedCountry);
         setrecipienttype(data[0].selectedrecipienttype);
-        setselectedpaytype(data[0].selectedpaytype)
-        setcmunicipality(data[0].municipality)
+        setselectedpaytype(data[0].selectedpaytype);
+        setcmunicipality(data[0].municipality);
       })
       .catch((err) => console.error("❌ خطأ في جلب البيانات:", err));
   };
 
   const InfoRow = ({ label, value }: { label: string; value: string }) => (
-  <div className="flex items-center gap-2">
-    <p className="font-medium">{label}:</p>
-    <p>{value}</p>
-  </div>
-)
-
+    <div className="flex items-center gap-2">
+      <p className="font-medium">{label}:</p>
+      <p>{value}</p>
+    </div>
+  );
 
   const handleSubmit = () => {
-   const f = {
+    const f = {
       id,
       customerName,
       selectedpaytype,
@@ -172,31 +218,34 @@ export default function OrderTable({ data , set }: { data: any[] , set:any }) {
       companyName,
       recipientNote,
       anthorNote,
-      municipality
+      municipality,
+    };
 
-    }
-
-    fetch("http://localhost:5678/webhook/c76fe851-77c4-488c-a1c1-88a5c05388db" , {
-      method:"POST",
-       headers: { "Content-Type": "application/json" },
-       body:JSON.stringify(f)
-    })
-    .then(() => {
-      fetchOrder(set , setisopen)
-      setisopen2(false)
-    })
+    fetch(
+      "http://localhost:5678/webhook/c76fe851-77c4-488c-a1c1-88a5c05388db",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(f),
+      }
+    ).then(() => {
+      fetchOrder(set, setisopen);
+      setisopen2(false);
+    });
   };
 
-  const deleteorder= (id:string) => {
-    fetch(`http://localhost:5678/webhook/bae46ce5-4a88-43bd-9373-4315f8fcc2e1?id=${id}`)
-    .then(res => {
-      if(!res.json) throw new Error("error in " as any)
-        return res.json()
-    })
-    .then(data => {
-      fetchOrder(set , setisopen)
-    })
-  }
+  const deleteorder = (id: string) => {
+    fetch(
+      `http://localhost:5678/webhook/bae46ce5-4a88-43bd-9373-4315f8fcc2e1?id=${id}`
+    )
+      .then((res) => {
+        if (!res.json) throw new Error("error in " as any);
+        return res.json();
+      })
+      .then((data) => {
+        fetchOrder(set, setisopen);
+      });
+  };
   return (
     <div>
       <Table className="">
@@ -435,40 +484,51 @@ export default function OrderTable({ data , set }: { data: any[] , set:any }) {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                               <InfoRow
                                 label="اسم المستلم"
-                                value={orderdatas.product?.json.recipientname}
+                                value={
+                                  orderdatas.product?.json.recipientname || ""
+                                }
                               />
                               <InfoRow
                                 label="رقم المستلم"
-                                value={orderdatas.product?.json.recipientphone}
+                                value={
+                                  orderdatas.product?.json.recipientphone || ""
+                                }
                               />
                               <InfoRow
                                 label="الدولة"
-                                value={orderdatas.product?.json.selectedCountry}
+                                value={
+                                  orderdatas.product?.json.selectedCountry || ""
+                                }
                               />
                               <InfoRow
                                 label="المدينة"
-                                value={orderdatas.product?.json.city}
+                                value={orderdatas.product?.json.city || ""}
                               />
                               <InfoRow
                                 label="البلدية"
-                                value={orderdatas.product?.json.municipality}
+                                value={
+                                  orderdatas.product?.json.municipality || ""
+                                }
                               />
                               <InfoRow
                                 label="العنوان"
-                                value={orderdatas.product?.json.address}
+                                value={orderdatas.product?.json.address || ""}
                               />
                               <InfoRow
                                 label="شركة الشحن"
-                                value={orderdatas.product?.json.companyname}
+                                value={
+                                  orderdatas.product?.json.companyname || ""
+                                }
                               />
                               <InfoRow
                                 label="كود التعقب"
-                                value={orderdatas.product?.json.code}
+                                value={orderdatas.product?.json.code || ""}
                               />
                               <InfoRow
                                 label="طريقة التسليم"
                                 value={
-                                  orderdatas.product?.json.selectedrecipienttype
+                                  orderdatas.product?.json
+                                    .selectedrecipienttype || ""
                                 }
                               />
                             </div>
@@ -491,8 +551,8 @@ export default function OrderTable({ data , set }: { data: any[] , set:any }) {
                   </Button>
                   <Button className="h-[34px] w-[40px] p-3 bg-green-500 hover:bg-green-400 duration-700 cursor-pointer">
                     <DialogComponent
-                    open={open2}
-                    onOpenChange={setisopen2}
+                      open={open2}
+                      onOpenChange={setisopen2}
                       textButton={<Edit />}
                       classButton="bg-green-500 hover:bg-green-400 text-white hover:text-white cursor-pointer"
                       onclick={() => handleSubmit()}
@@ -674,8 +734,6 @@ export default function OrderTable({ data , set }: { data: any[] , set:any }) {
                               />
                             </div>
 
-                            
-
                             {/* هاتف المستلم */}
                             <div className="flex flex-col gap-2">
                               <Label htmlFor="recipientPhone">
@@ -691,21 +749,26 @@ export default function OrderTable({ data , set }: { data: any[] , set:any }) {
                                 placeholder="اكتب رقم الهاتف"
                               />
                             </div>
-                            
+
+                            <div className="flex flex-col gap-2">
+                              <Label htmlFor="recipientPhone">البلد</Label>
+                              <SelectDynamic
+                                items={countrylist}
+                                value={country}
+                                onChange={setcountry}
+                              />
+                            </div>
+
                             <div className="flex flex-col gap-2">
                               <Label htmlFor="recipientPhone">
-                                 البلد
+                                طريقة الدفع
                               </Label>
-                              <SelectDynamic items={countrylist} value={country} onChange={setcountry} />
+                              <SelectDynamic
+                                items={paytype}
+                                value={selectedpaytype}
+                                onChange={setselectedpaytype}
+                              />
                             </div>
-                            
-                            <div className="flex flex-col gap-2">
-                              <Label htmlFor="recipientPhone">
-                                 طريقة الدفع
-                              </Label>
-                              <SelectDynamic items={paytype} value={selectedpaytype} onChange={setselectedpaytype} />
-                            </div>
-                            
 
                             {/* المدينة */}
                             <div className="flex flex-col gap-2">
@@ -783,7 +846,10 @@ export default function OrderTable({ data , set }: { data: any[] , set:any }) {
                       }
                     />
                   </Button>
-                  <Button onClick={() => deleteorder(order.order.json.id)} className="h-[34px] w-[40px] p-3 bg-red-500 hover:bg-red-400 duration-700 cursor-pointer mr-[-8px]">
+                  <Button
+                    onClick={() => deleteorder(order.order.json.id)}
+                    className="h-[34px] w-[40px] p-3 bg-red-500 hover:bg-red-400 duration-700 cursor-pointer mr-[-8px]"
+                  >
                     <Edit />
                   </Button>
                 </div>
